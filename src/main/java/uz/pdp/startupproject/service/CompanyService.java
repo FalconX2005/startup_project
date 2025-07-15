@@ -51,6 +51,7 @@ public class CompanyService {
                 .name(company.getName())
                 .phone(company.getPhone())
                 .address(company.getLocation())
+                .id(company.getId())
                 .build();
         return builder;
     }
