@@ -1,5 +1,6 @@
 package uz.pdp.startupproject.payload;
 
+import jakarta.validation.constraints.Null;
 import lombok.*;
 import uz.pdp.startupproject.enums.RoleEnum;
 
@@ -11,6 +12,7 @@ import java.io.Serializable;
 @Data
 @Builder
 public class UserDTO implements Serializable {
+
     private Long id;
     private String username;
     private String password;

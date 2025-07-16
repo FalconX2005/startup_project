@@ -11,6 +11,8 @@ import uz.pdp.startupproject.exception.RestException;
 import uz.pdp.startupproject.payload.ApiResult;
 import uz.pdp.startupproject.payload.EmployeeDTO;
 import uz.pdp.startupproject.payload.UserDTO;
+import uz.pdp.startupproject.payload.withoutId.EmployeeDto;
+import uz.pdp.startupproject.payload.withoutId.UserDto;
 import uz.pdp.startupproject.repository.AttachmentRepository;
 import uz.pdp.startupproject.repository.EmployeeRepository;
 import uz.pdp.startupproject.repository.UserRepository;
@@ -41,6 +43,8 @@ public class EmployeeService {
             if (!employee.isDeleted()) {
                 UserDTO userDTO = UserDTO.builder()
                         .role(employee.getUser().getRole())
+                        .email(employee.getUser().getEmail())
+                        .username(employee.getUser().getUsername())
                         .build();
 
                 EmployeeDTO employeeDTO = EmployeeDTO.builder()
@@ -78,6 +82,7 @@ public class EmployeeService {
                 UserDTO userDTO = UserDTO.builder()
                         .role(employee.getUser().getRole())
                         .username(user.getUsername())
+                        .email(user.getEmail())
                         .build();
 
 
@@ -103,14 +108,14 @@ public class EmployeeService {
 
 
     @Transactional
-    public ApiResult<EmployeeDTO> createEmployee(EmployeeDTO employeeDTO) {
+    public ApiResult<EmployeeDTO> createEmployee(EmployeeDto employeeDTO) {
         Employee employee = new Employee();
         employee.setFirstName(employeeDTO.getFirstName());
         employee.setLastName(employeeDTO.getLastName());
         employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setGender(employeeDTO.getGender());
 
-        UserDTO userDTO = employeeDTO.getUser();
+        UserDto userDTO = employeeDTO.getUser();
         if (userDTO == null) {
             throw RestException.badRequest("User info required");
         }
@@ -119,6 +124,7 @@ public class EmployeeService {
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
+        user.setEmail(userDTO.getEmail());
         userRepository.save(user);
         employee.setUser(user);
 
@@ -134,6 +140,7 @@ public class EmployeeService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .role(user.getRole())
+                .email(user.getEmail())
                 .build();
 
         EmployeeDTO empDTO = EmployeeDTO
@@ -153,7 +160,7 @@ public class EmployeeService {
 
 
     @Transactional
-    public ApiResult<EmployeeDTO> update(Long id, EmployeeDTO employeeDTO) {
+    public ApiResult<EmployeeDTO> update(Long id, EmployeeDto employeeDTO) {
 
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> RestException.notFound("Employee not found: ", id));
@@ -163,7 +170,7 @@ public class EmployeeService {
         employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setGender(employeeDTO.getGender());
 
-        UserDTO userDto = employeeDTO.getUser();
+        UserDto userDto = employeeDTO.getUser();
         if (userDto == null) {
             throw RestException.badRequest("User info required");
         }

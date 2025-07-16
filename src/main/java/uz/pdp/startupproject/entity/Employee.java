@@ -13,16 +13,20 @@ import uz.pdp.startupproject.enums.Gender;
 @ToString
 @Builder
 public class Employee extends AbsLongEntity {
+
+    @Column(nullable = false)
     private String firstName;
 
+    @Column(nullable = false)
     private String lastName;
+
 
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

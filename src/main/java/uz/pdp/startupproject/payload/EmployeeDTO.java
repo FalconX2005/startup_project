@@ -18,12 +18,10 @@ public class EmployeeDTO implements Serializable {
     private String lastName;
     private String phoneNumber;
     private Gender gender;
-    private Long userId;
 
     private UserDTO user;
 
     private Long attachmentId;
-
 
 
 }

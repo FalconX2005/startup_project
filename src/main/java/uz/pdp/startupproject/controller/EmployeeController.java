@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.startupproject.payload.ApiResult;
 import uz.pdp.startupproject.payload.EmployeeDTO;
+import uz.pdp.startupproject.payload.withoutId.EmployeeDto;
 import uz.pdp.startupproject.service.EmployeeService;
 
 import java.util.List;
@@ -30,13 +31,13 @@ public class EmployeeController {
     }
 
     @PostMapping("/create")
-    public ApiResult<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employeeDTO) {
+    public ApiResult<EmployeeDTO> createEmployee(@RequestBody EmployeeDto employeeDTO) {
         return employeeService.createEmployee(employeeDTO);
     }
 
 
     @PutMapping("/update/{id}")
-    public ApiResult<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDTO employeeDTO) {
+    public ApiResult<EmployeeDTO> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDTO) {
         return employeeService.update(id, employeeDTO);
     }
 
