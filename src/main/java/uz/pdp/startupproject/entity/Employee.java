@@ -28,6 +28,7 @@ public class Employee extends AbsLongEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Company company;
 
-
-
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "attachment_id")
+    private Attachment attachment;
 }
