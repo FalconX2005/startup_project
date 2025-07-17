@@ -23,9 +23,9 @@ public class UserDto implements Serializable {
     @Size(min = 4,message = "password kamida 4 ta belgi bulishi kerak")
     private String password;
 
-    @NotBlank(message = "email bush bulishi mumkun emas!")
+    /*@NotBlank(message = "email bush bulishi mumkun emas!")
     @Email(message = "Email format xato!")
-    private String email;
+    private String email;*/
 
     private RoleEnum role;
 }

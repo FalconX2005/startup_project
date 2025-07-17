@@ -2,6 +2,7 @@ package uz.pdp.startupproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import uz.pdp.startupproject.entity.tempAbs.AbsLongEntity;
 import uz.pdp.startupproject.enums.Gender;
 
@@ -12,6 +13,7 @@ import uz.pdp.startupproject.enums.Gender;
 @Setter
 @ToString
 @Builder
+@SQLDelete(sql = "UPDATE attachment SET deleted = true WHERE id = ?")
 public class Employee extends AbsLongEntity {
 
     @Column(nullable = false)

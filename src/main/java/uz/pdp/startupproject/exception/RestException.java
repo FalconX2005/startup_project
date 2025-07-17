@@ -2,10 +2,7 @@ package uz.pdp.startupproject.exception;
 
 import lombok.Getter;
 
-/**
- * Created by: Umar
- * DateTime: 2/10/2025 4:48 PM
- */
+
 @Getter
 public class RestException extends RuntimeException {
     private final int statusCode;

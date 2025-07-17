@@ -8,10 +8,6 @@ import uz.pdp.startupproject.payload.ErrorDTO;
 
 import java.sql.Timestamp;
 
-/**
- * Created by: Umar
- * DateTime: 2/10/2025 4:46 PM
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler2 {
 

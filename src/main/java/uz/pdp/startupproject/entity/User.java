@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
 import uz.pdp.startupproject.entity.tempAbs.AbsLongEntity;
 import uz.pdp.startupproject.enums.RoleEnum;
 
@@ -15,6 +16,7 @@ import uz.pdp.startupproject.enums.RoleEnum;
 @Setter
 @ToString
 @Builder
+@SQLDelete(sql = "UPDATE attachment SET deleted = true WHERE id = ?")
 public class User extends AbsLongEntity {
 
     @Column(unique = true, nullable = false)
@@ -22,7 +24,7 @@ public class User extends AbsLongEntity {
 
     private String password;
 
-    private String email;
+//    private String email;
 
     @Enumerated(EnumType.STRING)
     private RoleEnum role;

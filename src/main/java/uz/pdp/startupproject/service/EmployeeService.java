@@ -43,7 +43,7 @@ public class EmployeeService {
             if (!employee.isDeleted()) {
                 UserDTO userDTO = UserDTO.builder()
                         .role(employee.getUser().getRole())
-                        .email(employee.getUser().getEmail())
+//                        .email(employee.getUser().getEmail())
                         .username(employee.getUser().getUsername())
                         .build();
 
@@ -82,7 +82,7 @@ public class EmployeeService {
                 UserDTO userDTO = UserDTO.builder()
                         .role(employee.getUser().getRole())
                         .username(user.getUsername())
-                        .email(user.getEmail())
+//                        .email(user.getEmail())
                         .build();
 
 
@@ -124,7 +124,7 @@ public class EmployeeService {
         user.setUsername(userDTO.getUsername());
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
-        user.setEmail(userDTO.getEmail());
+//        user.setEmail(userDTO.getEmail());
         userRepository.save(user);
         employee.setUser(user);
 
@@ -140,7 +140,7 @@ public class EmployeeService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .role(user.getRole())
-                .email(user.getEmail())
+//                .email(user.getEmail())
                 .build();
 
         EmployeeDTO empDTO = EmployeeDTO
@@ -223,7 +223,7 @@ public class EmployeeService {
     @Transactional
     public ApiResult<EmployeeDTO> delete(Long id) {
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> RestException.notFound("Employee not found", id));
+                .orElseThrow(() -> RestException.notFound("Employee not found: ", id));
         employee.setDeleted(true);
         employeeRepository.save(employee);
 
