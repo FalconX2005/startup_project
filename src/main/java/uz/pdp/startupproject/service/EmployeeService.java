@@ -44,6 +44,7 @@ public class EmployeeService {
         for (Employee employee : employees) {
             if (!employee.isDeleted()) {
                 UserDTO userDTO = UserDTO.builder()
+                        .id(employee.getId())
                         .role(employee.getUser().getRole())
 //                        .email(employee.getUser().getEmail())
                         .username(employee.getUser().getUsername())

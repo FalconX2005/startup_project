@@ -17,16 +17,16 @@ import java.util.Optional;
 public class CompanyService {
 
     @Autowired
-    private  final CompanyRepository companyRepository;
+    private final CompanyRepository companyRepository;
 
-    public   List<CompanyDTO> findAll() {
+    public List<CompanyDTO> findAll() {
         List<Company> companies = companyRepository.findAll();
         List<CompanyDTO> companiesDto = new ArrayList<>();
         if (companies.isEmpty()) {
             throw new RuntimeException("No companies found");
         }
         for (Company company : companies) {
-            if(company.isDeleted()){
+            if (company.isDeleted()) {
                 continue;
             }
             CompanyDTO build = CompanyDTO.builder()
@@ -44,7 +44,7 @@ public class CompanyService {
     public CompanyDTO findById(Long id) {
         Optional<Company> byId = companyRepository.findById(id);
         if (!byId.isPresent()) {
-            throw new  RuntimeException("Company not found");
+            throw new RuntimeException("Company not found");
         }
         Company company = byId.get();
         CompanyDTO builder = CompanyDTO.builder()
@@ -72,6 +72,7 @@ public class CompanyService {
         companyDto.setId(build.getId());
         return companyDto;
     }
+
     public CompanyDTO update(CompanyDTO companyDto) {
         Optional<Company> byId = companyRepository.findById(companyDto.getId());
         if (!byId.isPresent()) {
@@ -104,6 +105,5 @@ public class CompanyService {
 
         return build;
     }
-
 
 }
