@@ -23,5 +23,6 @@ public class EmployeeDTO implements Serializable {
 
     private Long attachmentId;
 
+    private Long companyId;
 
 }

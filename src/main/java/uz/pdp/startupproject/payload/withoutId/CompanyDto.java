@@ -1,4 +1,4 @@
-package uz.pdp.startupproject.payload;
+package uz.pdp.startupproject.payload.withoutId;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CompanyDto {
 
-    private Long id ;
 
     private String name ;
 

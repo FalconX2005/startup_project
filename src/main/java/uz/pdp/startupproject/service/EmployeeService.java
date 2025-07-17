@@ -14,6 +14,7 @@ import uz.pdp.startupproject.payload.UserDTO;
 import uz.pdp.startupproject.payload.withoutId.EmployeeDto;
 import uz.pdp.startupproject.payload.withoutId.UserDto;
 import uz.pdp.startupproject.repository.AttachmentRepository;
+import uz.pdp.startupproject.repository.CompanyRepository;
 import uz.pdp.startupproject.repository.EmployeeRepository;
 import uz.pdp.startupproject.repository.UserRepository;
 
@@ -32,6 +33,7 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final AttachmentRepository attachmentRepository;
     private final UserRepository userRepository;
+    private final CompanyRepository companyRepository;
 
 
     @Transactional
@@ -52,8 +54,9 @@ public class EmployeeService {
                         .firstName(employee.getFirstName())
                         .lastName(employee.getLastName())
                         .phoneNumber(employee.getPhoneNumber())
-                        .attachmentId(employee.getAttachment() != null ? employee.getAttachment().getId() : null)
                         .gender(employee.getGender())
+                        .attachmentId(employee.getAttachment() != null ? employee.getAttachment().getId() : null)
+                        .companyId(employee.getCompany() != null ? employee.getCompany().getId() : null)
                         .user(userDTO)
                         .build();
 
@@ -94,6 +97,7 @@ public class EmployeeService {
                             .phoneNumber(employee.getPhoneNumber())
                             .gender(employee.getGender())
                             .attachmentId(employee.getAttachment().getId())
+                            .companyId(employee.getCompany().getId())
                             .user(userDTO)
                             .build();
                     return ApiResult.success(employeeDTO);
@@ -115,6 +119,7 @@ public class EmployeeService {
         employee.setPhoneNumber(employeeDTO.getPhoneNumber());
         employee.setGender(employeeDTO.getGender());
 
+
         UserDto userDTO = employeeDTO.getUser();
         if (userDTO == null) {
             throw RestException.badRequest("User info required");
@@ -134,6 +139,13 @@ public class EmployeeService {
             employee.setAttachment(attachmentId);
         }
 
+        if(employeeDTO.getCompanyId() != null) {
+            Company company = companyRepository.findById(employeeDTO.getCompanyId())
+                    .orElseThrow(() -> RestException.notFound("Company not found: ", employeeDTO.getCompanyId()));
+
+            employee.setCompany(company);
+        }
+
         employeeRepository.save(employee);
 
         UserDTO userDTO1 = UserDTO.builder()
@@ -151,6 +163,7 @@ public class EmployeeService {
                 .phoneNumber(employee.getPhoneNumber())
                 .gender(employee.getGender())
                 .attachmentId(employee.getAttachment() != null ? employee.getAttachment().getId() : null)
+                .companyId(employee.getCompany() != null ? employee.getCompany().getId() : null)
                 .user(userDTO1)
                 .build();
 
@@ -194,6 +207,13 @@ public class EmployeeService {
             employee.setAttachment(attachment);
         }
 
+        if(employeeDTO.getCompanyId() != null) {
+            Company company = companyRepository.findById(employeeDTO.getCompanyId())
+                    .orElseThrow(() -> RestException.notFound("Company not found: ", employeeDTO.getCompanyId()));
+
+            employee.setCompany(company);
+        }
+
 
         employeeRepository.save(employee);
 
@@ -211,6 +231,7 @@ public class EmployeeService {
                     .phoneNumber(employee.getPhoneNumber())
                     .gender(employee.getGender())
                     .attachmentId(employee.getAttachment() != null ? employee.getAttachment().getId() : null)
+                    .companyId(employee.getCompany() != null ? employee.getCompany().getId() : null)
                     .user(userDTO)
                     .build();
 
