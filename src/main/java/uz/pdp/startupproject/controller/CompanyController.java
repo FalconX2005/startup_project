@@ -37,7 +37,7 @@ public class CompanyController {
         CompanyDto delete = companyService.delete(id);
         return true;
     }
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public CompanyDto update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
         CompanyDto update = companyService.update(companyDto);
         return update;
