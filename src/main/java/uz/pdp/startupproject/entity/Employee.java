@@ -1,4 +1,4 @@
-package uz.pdp.startupproject.entity;
+ package uz.pdp.startupproject.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
