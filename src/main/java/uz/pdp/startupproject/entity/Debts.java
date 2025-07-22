@@ -18,8 +18,10 @@ public class Debts extends AbsLongEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Client  client;
 
+/*
     @ManyToOne(fetch = FetchType.LAZY)
     private Product  product;
+*/
 
     private Long debtAmount;
 

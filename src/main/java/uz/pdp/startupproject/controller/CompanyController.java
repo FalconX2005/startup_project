@@ -2,7 +2,8 @@ package uz.pdp.startupproject.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.startupproject.payload.CompanyDto;
+import uz.pdp.startupproject.payload.CompanyDTO;
+import uz.pdp.startupproject.payload.withoutId.CompanyDto;
 import uz.pdp.startupproject.service.CompanyService;
 
 import java.util.List;
@@ -15,31 +16,38 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping
-    public List<CompanyDto> findAll() {
-        List<CompanyDto> all = companyService.findAll();
+    public List<CompanyDTO> findAll() {
+        List<CompanyDTO> all = companyService.findAll();
         return all;
     }
 
     @GetMapping("/{id}")
-    public CompanyDto findById(@PathVariable Long id) {
-        CompanyDto byId = companyService.findById(id);
+    public CompanyDTO findById(@PathVariable Long id) {
+        CompanyDTO byId = companyService.findById(id);
         return byId;
     }
 
     @PostMapping("/create")
-    public CompanyDto create(@RequestBody CompanyDto companyDto) {
-        CompanyDto save = companyService.save(companyDto);
+    public CompanyDTO create(@RequestBody CompanyDTO companyDto) {
+        CompanyDTO save = companyService.save(companyDto);
         return save;
     }
 
     @DeleteMapping("/{id}")
     public boolean delete(@PathVariable Long id) {
-        CompanyDto delete = companyService.delete(id);
+        CompanyDTO delete = companyService.delete(id);
         return true;
     }
+ employee_branch
+
+    @PutMapping("/{id}")
+    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDto) {
+        CompanyDTO update = companyService.update(companyDto);
+
     @PutMapping("/update/{id}")
     public CompanyDto update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
         CompanyDto update = companyService.update(companyDto);
+ client
         return update;
     }
 

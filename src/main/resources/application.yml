@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/start_up
+    url: jdbc:postgresql://localhost:5432/startup_project
     username: postgres
-    password: 123
+    password: umar2308
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -13,4 +13,8 @@ spring:
       hibernate:
         format_sql: true
 server:
-  port: 8085
+  port: 8086
+
+app:
+  files:
+    baseFolder: /files
