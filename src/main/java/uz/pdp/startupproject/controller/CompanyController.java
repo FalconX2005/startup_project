@@ -2,6 +2,8 @@ package uz.pdp.startupproject.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.startupproject.filter.SearchService;
+import uz.pdp.startupproject.payload.ApiResult;
 import uz.pdp.startupproject.payload.CompanyDTO;
 import uz.pdp.startupproject.payload.withoutId.CompanyDto;
 import uz.pdp.startupproject.service.CompanyService;
@@ -14,6 +16,7 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final SearchService searchService;
 
     @GetMapping
     public List<CompanyDTO> findAll() {
@@ -45,4 +48,10 @@ public class CompanyController {
         return update;
     }
 
+
+    @GetMapping("/search")
+    public ApiResult<List<CompanyDTO>> search(@RequestParam String name) {
+        List<CompanyDTO> companyDTOS = searchService.searchCompany(name);
+        return ApiResult.success(companyDTOS);
+    }
 }
