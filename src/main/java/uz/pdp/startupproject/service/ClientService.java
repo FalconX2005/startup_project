@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.startupproject.entity.Client;
 import uz.pdp.startupproject.entity.User;
-import uz.pdp.startupproject.payload.ClientDto;
+import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.repository.ClientRepository;
 import uz.pdp.startupproject.repository.UserRepository;
 
@@ -19,15 +19,15 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final UserRepository userRepository;
 
-    public List<ClientDto> getAll() {
+    public List<ClientDTO> getAll() {
         List<Client> all = clientRepository.findAll();
 
         if (all.isEmpty()) {
             throw new RuntimeException("Client not found");
         }
-        List<ClientDto> clientDtos = new ArrayList<>();
+        List<ClientDTO> clientDtos = new ArrayList<>();
         for (Client client : all) {
-            ClientDto build = ClientDto.builder()
+            ClientDTO build = ClientDTO.builder()
                     .id(client.getId())
                     .role(client.getUser().getRole())
                     .balance(client.getBalance())
@@ -40,14 +40,14 @@ public class ClientService {
         return clientDtos;
     }
 
-    public ClientDto getById(Long id) {
+    public ClientDTO getById(Long id) {
         Optional<Client> byId = clientRepository.findById(id);
 
         if (!byId.isPresent()) {
             throw new RuntimeException("Client not found");
         }
         Client client = byId.get();
-        ClientDto build = ClientDto.builder()
+        ClientDTO build = ClientDTO.builder()
                 .firstName(client.getFirstName())
                 .lastName(client.getLastName())
                 .role(client.getUser().getRole())
@@ -59,7 +59,7 @@ public class ClientService {
         return build;
     }
 
-    public ClientDto save(ClientDto clientDto) {
+    public ClientDTO save(ClientDTO clientDto) {
 
         Optional<User> user = userRepository.findByUsername(clientDto.getUsername());
         if (user.isPresent()) {
@@ -85,7 +85,7 @@ public class ClientService {
         return clientDto;
     }
 
-    public ClientDto update(ClientDto clientDto) {
+    public ClientDTO update(ClientDTO clientDto) {
 
         Optional<Client> byId = clientRepository.findById(clientDto.getId());
 
@@ -115,7 +115,7 @@ public class ClientService {
 
     }
 
-    public ClientDto delete(Long id) {
+    public ClientDTO delete(Long id) {
         Optional<Client> byId = clientRepository.findById(id);
         if (!byId.isPresent()) {
             throw new RuntimeException("client not found ");
@@ -128,7 +128,7 @@ public class ClientService {
         User user1 = byId1.get();
         userRepository.delete(user1);
         clientRepository.delete(client);
-        ClientDto build = ClientDto.builder()
+        ClientDTO build = ClientDTO.builder()
                 .id(client.getId())
                 .role(client.getUser().getRole())
                 .balance(client.getBalance())

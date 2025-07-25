@@ -41,16 +41,10 @@ public class CompanyController {
         CompanyDTO delete = companyService.delete(id);
         return true;
     }
- employee_branch
 
     @PutMapping("/{id}")
     public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDto) {
         CompanyDTO update = companyService.update(companyDto);
-
-    @PutMapping("/update/{id}")
-    public CompanyDto update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
-        CompanyDto update = companyService.update(companyDto);
- client
         return update;
     }
 

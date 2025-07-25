@@ -2,7 +2,9 @@ package uz.pdp.startupproject.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import uz.pdp.startupproject.payload.ClientDto;
+import uz.pdp.startupproject.filter.SearchService;
+import uz.pdp.startupproject.payload.ApiResult;
+import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.service.ClientService;
 
 import java.util.List;
@@ -12,35 +14,41 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final SearchService searchService;
 
-    @GetMapping
-    public List<ClientDto>getAllClients() {
-        List<ClientDto> allClients = clientService.getAll();
+    @GetMapping("/getAll")
+    public List<ClientDTO>getAllClients() {
+        List<ClientDTO> allClients = clientService.getAll();
         return allClients;
     }
 
     @GetMapping("/{id}")
-    public ClientDto getClientById(@PathVariable Long id) {
-        ClientDto clientById = clientService.getById(id);
+    public ClientDTO getClientById(@PathVariable Long id) {
+        ClientDTO clientById = clientService.getById(id);
         return clientById;
     }
 
     @PostMapping("/create")
-    public ClientDto createClient(@RequestBody ClientDto client) {
-        ClientDto client1 = clientService.save(client);
+    public ClientDTO createClient(@RequestBody ClientDTO client) {
+        ClientDTO client1 = clientService.save(client);
         return client1;
     }
     @PutMapping("/update/{id}")
-    public ClientDto updateClient(@PathVariable Long id ,@RequestBody ClientDto client) {
-        ClientDto update = clientService.update(client);
+    public ClientDTO updateClient(@PathVariable Long id , @RequestBody ClientDTO client) {
+        ClientDTO update = clientService.update(client);
         return update;
     }
 
     @DeleteMapping("/{id}")
-    public ClientDto deleteClient(@PathVariable Long id) {
-        ClientDto delete = clientService.delete(id);
+    public ClientDTO deleteClient(@PathVariable Long id) {
+        ClientDTO delete = clientService.delete(id);
         return delete;
+    }
 
+    @GetMapping("/search")
+    public ApiResult<List<ClientDTO>> searchClient(@RequestParam String name) {
+        List<ClientDTO> clientDTOS = searchService.searchClient(name);
+        return ApiResult.success(clientDTOS);
     }
 
 }
