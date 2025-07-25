@@ -27,4 +27,8 @@ public class ClientDTO {
     private String password ;
 
     private RoleEnum role ;
+
+
+
+
 }
