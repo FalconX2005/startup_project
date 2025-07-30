@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.startupproject.entity.Client;
 import uz.pdp.startupproject.entity.Company;
+import uz.pdp.startupproject.entity.Employee;
 import uz.pdp.startupproject.exception.RestException;
 import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.payload.CompanyDTO;
+import uz.pdp.startupproject.payload.EmployeeDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,44 @@ public class SearchService {
                 .username(client.getUser().getUsername())
                 .password(client.getUser().getPassword())
                 .role(client.getUser().getRole())
+                .build();
+    }
+
+    public List<EmployeeDTO> searchEmployee(String name){
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
+        Root<Employee> from = criteriaQuery.from(Employee.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        Predicate firstName = criteriaBuilder.like(criteriaBuilder.lower(from.get("firstName")), "%" + name.toLowerCase() + "%");
+        Predicate lastName = criteriaBuilder.like(criteriaBuilder.lower(from.get("lastName")), "%" + name.toLowerCase() + "%");
+
+        Predicate predicate = criteriaBuilder.or(firstName, lastName);
+        predicates.add(predicate);
+
+        criteriaQuery.where(predicates.toArray(new Predicate[0]));
+
+        List<Employee> resultList = entityManager.createQuery(criteriaQuery).getResultList();
+        if(resultList.isEmpty()) {
+            throw RestException.error("Employee not found");
+        }
+
+        return resultList
+                .stream()
+                .map(this::convertEmployeeToDto)
+                .collect(Collectors.toList());
+
+    }
+
+    private EmployeeDTO convertEmployeeToDto(Employee employee) {
+        return EmployeeDTO.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .phoneNumber(employee.getPhoneNumber())
+                .attachmentId(employee.getAttachment().getId())
+                .companyId(employee.getCompany().getId())
+                .gender(employee.getGender())
                 .build();
     }
 }
