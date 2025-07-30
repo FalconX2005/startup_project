@@ -13,7 +13,7 @@ import uz.pdp.startupproject.enums.Gender;
 @Setter
 @ToString
 @Builder
-@SQLDelete(sql = "UPDATE attachment SET deleted = true WHERE id = ?")
+@SQLDelete(sql = "UPDATE employee SET deleted = true WHERE id = ?")
 public class Employee extends AbsLongEntity {
 
     @Column(nullable = false)

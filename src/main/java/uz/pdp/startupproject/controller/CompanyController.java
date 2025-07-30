@@ -22,7 +22,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public CompanyDTO findById(@PathVariable Long id) {
+    public CompanyDTO getById(@PathVariable Long id) {
         CompanyDTO byId = companyService.findById(id);
         return byId;
     }
@@ -38,16 +38,13 @@ public class CompanyController {
         CompanyDTO delete = companyService.delete(id);
         return true;
     }
- employee_branch
 
-    @PutMapping("/{id}")
-    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDto) {
-        CompanyDTO update = companyService.update(companyDto);
+
+
 
     @PutMapping("/update/{id}")
-    public CompanyDto update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
-        CompanyDto update = companyService.update(companyDto);
- client
+    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDTO) {
+        CompanyDTO update = companyService.update(companyDTO);
         return update;
     }
 

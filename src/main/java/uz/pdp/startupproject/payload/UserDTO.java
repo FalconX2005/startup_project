@@ -22,7 +22,7 @@ public class UserDTO implements Serializable {
     private String username;
 
     @NotBlank(message = "password bush bulishi mumkun emas!")
-    @Size(min = 4, message = "password kamida 4 ta belgi bulishi kerak")
+//    @Size(min = 4, message = "password kamida 4 ta belgi bulishi kerak")
     private String password;
 
 

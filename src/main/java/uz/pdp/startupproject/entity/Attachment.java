@@ -16,6 +16,7 @@ import uz.pdp.startupproject.entity.tempAbs.AbsLongEntity;
 @Setter
 @ToString
 @Entity
+
 public class Attachment extends AbsLongEntity {
     private String fileName;
 
