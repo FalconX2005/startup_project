@@ -24,7 +24,7 @@ import java.util.List;
 @ToString
 @Builder
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
-public class User extends AbsLongEntity {
+public class User extends AbsLongEntity implements UserDetails {
 
     @Column(unique = true, nullable = false)
     private String username;
@@ -32,7 +32,7 @@ public class User extends AbsLongEntity {
     @Column(nullable = false)
     private String password;
 
-//    private String email;
+    private String email;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)

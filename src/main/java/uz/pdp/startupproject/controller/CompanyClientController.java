@@ -3,7 +3,7 @@ package uz.pdp.startupproject.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import uz.pdp.startupproject.payload.ApiResult;
-import uz.pdp.startupproject.payload.ClientDto;
+import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.payload.CompanyClientDTO;
 import uz.pdp.startupproject.payload.CompanyDTO;
 import uz.pdp.startupproject.service.CompanyClientService;
@@ -17,8 +17,8 @@ public class CompanyClientController {
     private final CompanyClientService companyClientService;
 
     @GetMapping("/{id}")
-    public ApiResult<List<ClientDto>> findAllClientsByCompanyId(@PathVariable Long companyId) {
-        List<ClientDto> allClients = companyClientService.findAllClients(companyId);
+    public ApiResult<List<ClientDTO>> findAllClientsByCompanyId(@PathVariable Long companyId) {
+        List<ClientDTO> allClients = companyClientService.findAllClients(companyId);
         return ApiResult.success(allClients);
     }
 

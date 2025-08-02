@@ -136,7 +136,7 @@ public class ClientService {
          else {
              throw RestException.error("Client's balance is not 0 ");
          }
-        ClientDto build = ClientDto.builder()
+        ClientDTO build = ClientDTO.builder()
                 .id(client.getId())
                 .role(client.getUser().getRole())
                 .balance(client.getBalance())
