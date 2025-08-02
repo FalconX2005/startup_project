@@ -23,16 +23,18 @@ import java.util.List;
 @Setter
 @ToString
 @Builder
-@SQLDelete(sql = "UPDATE attachment SET deleted = true WHERE id = ?")
-public class User extends AbsLongEntity implements UserDetails {
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE id = ?")
+public class User extends AbsLongEntity {
 
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
-    private String email;
+//    private String email;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 

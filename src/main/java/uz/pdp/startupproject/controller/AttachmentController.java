@@ -20,6 +20,7 @@ public class AttachmentController {
     private final AttachmentService attachmentService;
 
 
+
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResult<AttachmentDTO> uploadAttachment(@RequestParam("/file") MultipartFile file) {
         ApiResult<AttachmentDTO> upload = attachmentService.upload(file);

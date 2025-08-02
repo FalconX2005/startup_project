@@ -25,7 +25,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public CompanyDTO findById(@PathVariable Long id) {
+    public CompanyDTO getById(@PathVariable Long id) {
         CompanyDTO byId = companyService.findById(id);
         return byId;
     }
@@ -42,9 +42,12 @@ public class CompanyController {
         return true;
     }
 
-    @PutMapping("/{id}")
-    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDto) {
-        CompanyDTO update = companyService.update(companyDto);
+
+
+
+    @PutMapping("/update/{id}")
+    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDTO) {
+        CompanyDTO update = companyService.update(companyDTO);
         return update;
     }
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.startupproject.entity.Client;
 import uz.pdp.startupproject.entity.User;
+import uz.pdp.startupproject.exception.RestException;
 import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.repository.ClientRepository;
 import uz.pdp.startupproject.repository.UserRepository;
@@ -23,7 +24,7 @@ public class ClientService {
         List<Client> all = clientRepository.findAll();
 
         if (all.isEmpty()) {
-            throw new RuntimeException("Client not found");
+            throw RestException.notFound("client not found",0);
         }
         List<ClientDTO> clientDtos = new ArrayList<>();
         for (Client client : all) {
@@ -44,7 +45,8 @@ public class ClientService {
         Optional<Client> byId = clientRepository.findById(id);
 
         if (!byId.isPresent()) {
-            throw new RuntimeException("Client not found");
+
+            throw RestException.notFound("client not found",id);
         }
         Client client = byId.get();
         ClientDTO build = ClientDTO.builder()
@@ -63,7 +65,7 @@ public class ClientService {
 
         Optional<User> user = userRepository.findByUsername(clientDto.getUsername());
         if (user.isPresent()) {
-            throw new RuntimeException("User already exists");
+            throw RestException.error("client already exist");
         }
         User build = User.builder()
                 .username(clientDto.getUsername())
@@ -90,7 +92,7 @@ public class ClientService {
         Optional<Client> byId = clientRepository.findById(clientDto.getId());
 
         if (!byId.isPresent()) {
-            throw new RuntimeException("Client not found");
+            throw RestException.notFound("client not found",clientDto.getId());
         }
         Client client = byId.get();
         Optional<User> user = userRepository.findById(client.getUser().getId());
@@ -117,18 +119,24 @@ public class ClientService {
 
     public ClientDTO delete(Long id) {
         Optional<Client> byId = clientRepository.findById(id);
+
         if (!byId.isPresent()) {
-            throw new RuntimeException("client not found ");
+            throw RestException.notFound("client not found",id);
         }
         Client client = byId.get();
-        Optional<User> byId1 = userRepository.findById(client.getUser().getId());
-        if (!byId1.isPresent()) {
-            throw new RuntimeException("User not found");
-        }
-        User user1 = byId1.get();
-        userRepository.delete(user1);
-        clientRepository.delete(client);
-        ClientDTO build = ClientDTO.builder()
+         if(client.getBalance() == 0 ) {
+             Optional<User> byId1 = userRepository.findById(client.getUser().getId());
+             if (!byId1.isPresent()) {
+                 throw RestException.notFound("User not found",id);
+             }
+             User user1 = byId1.get();
+             userRepository.delete(user1);
+             clientRepository.delete(client);
+         }
+         else {
+             throw RestException.error("Client's balance is not 0 ");
+         }
+        ClientDto build = ClientDto.builder()
                 .id(client.getId())
                 .role(client.getUser().getRole())
                 .balance(client.getBalance())
