@@ -25,7 +25,7 @@ public class EmployeeDto implements Serializable {
     private String lastName;
 
     @NotBlank(message = "phoneNumber bo'sh bo'lishi mumkin emas")
-    @Pattern(regexp = "\\+998\\d{9}",message = "tel nomer formati noto'g'ri Masalan: +998901234567")
+    @Pattern(regexp = "\\+998\\d{9}", message = "tel nomer formati noto'g'ri Masalan: +998901234567")
     private String phoneNumber;
 
     @NotNull(message = "gender bo'sh bo'lishi mumkin emas")
@@ -38,7 +38,6 @@ public class EmployeeDto implements Serializable {
 
     @NotNull(message = "companyId bo'sh bo'lishi mumkin emas")
     private Long companyId;
-
 
 
 }

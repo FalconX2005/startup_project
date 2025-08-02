@@ -14,6 +14,7 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final SearchService searchService;
 
     @GetMapping
     public List<CompanyDTO> findAll() {
@@ -38,14 +39,23 @@ public class CompanyController {
         CompanyDTO delete = companyService.delete(id);
         return true;
     }
+ employee_branch
 
-
-
+    @PutMapping("/{id}")
+    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDto) {
+        CompanyDTO update = companyService.update(companyDto);
 
     @PutMapping("/update/{id}")
-    public CompanyDTO update(@PathVariable Long id, @RequestBody CompanyDTO companyDTO) {
-        CompanyDTO update = companyService.update(companyDTO);
+    public CompanyDto update(@PathVariable Long id, @RequestBody CompanyDto companyDto) {
+        CompanyDto update = companyService.update(companyDto);
+ client
         return update;
     }
 
+
+    @GetMapping("/search")
+    public ApiResult<List<CompanyDTO>> search(@RequestParam String name) {
+        List<CompanyDTO> companyDTOS = searchService.searchCompany(name);
+        return ApiResult.success(companyDTOS);
+    }
 }

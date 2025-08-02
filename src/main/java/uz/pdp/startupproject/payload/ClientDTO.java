@@ -13,7 +13,7 @@ import uz.pdp.startupproject.enums.RoleEnum;
 @NoArgsConstructor
 @Data
 @Builder
-public class ClientDto {
+public class ClientDTO {
 
     @NotNull
     private  Long id ;
