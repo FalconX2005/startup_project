@@ -12,7 +12,7 @@ spring:
         format_sql: true
 
 server:
-  port: ${PORT:8086}  # Railway avtomatik port beradi, lekin default 8086 bo'lib qoladi agar PORT yo'q bo'lsa
+  port: ${PORT:8080}  # Railway avtomatik port beradi, lekin default 8086 bo'lib qoladi agar PORT yo'q bo'lsa
 
 telegram:
   bot:
