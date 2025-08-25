@@ -7,7 +7,7 @@ import uz.pdp.startupproject.entity.Company;
 import uz.pdp.startupproject.entity.CompanyClient;
 import uz.pdp.startupproject.exception.RestException;
 import uz.pdp.startupproject.payload.ApiResult;
-import uz.pdp.startupproject.payload.ClientDto;
+import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.payload.CompanyClientDTO;
 import uz.pdp.startupproject.payload.CompanyDTO;
 import uz.pdp.startupproject.repository.ClientRepository;
@@ -28,14 +28,14 @@ public class CompanyClientService {
     private final CompanyRepository companyRepository;
 
     // companyga tegishli clientlarni company id bo'yicha sortlash
-    public List<ClientDto> findAllClients(Long companyId){
-       List<CompanyClient> clients= companyClientRepository.findByCompanyId(companyId);
-       List<ClientDto> result = new ArrayList<>();
-       for (CompanyClient client: clients) {
-           ClientDto byId = clientService.getById(client.getClient().getId());
-           result.add(byId);
-       }
-       return result;
+    public List<ClientDTO> findAllClients(Long companyId){
+        List<CompanyClient> clients= companyClientRepository.findByCompanyId(companyId);
+        List<ClientDTO> result = new ArrayList<>();
+        for (CompanyClient client: clients) {
+            ClientDTO byId = clientService.getById(client.getClient().getId());
+            result.add(byId);
+        }
+        return result;
     }
 
     // companyni client orqali topish uchun  yozildi
@@ -86,7 +86,7 @@ public class CompanyClientService {
                 .id(companyClient.getId())
                 .build());
     }
-    }
+}
 
 
 

@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.pdp.startupproject.entity.Client;
 import uz.pdp.startupproject.entity.User;
-import uz.pdp.startupproject.payload.ClientDto;
+import uz.pdp.startupproject.exception.RestException;
+import uz.pdp.startupproject.payload.ClientDTO;
 import uz.pdp.startupproject.repository.ClientRepository;
 import uz.pdp.startupproject.repository.UserRepository;
 
@@ -25,9 +26,9 @@ public class ClientService {
         if (all.isEmpty()) {
             throw RestException.notFound("client not found",0);
         }
-        List<ClientDto> clientDtos = new ArrayList<>();
+        List<ClientDTO> clientDtos = new ArrayList<>();
         for (Client client : all) {
-            ClientDto build = ClientDto.builder()
+            ClientDTO build = ClientDTO.builder()
                     .id(client.getId())
                     .role(client.getUser().getRole())
                     .balance(client.getBalance())
@@ -123,19 +124,19 @@ public class ClientService {
             throw RestException.notFound("client not found",id);
         }
         Client client = byId.get();
-         if(client.getBalance() == 0 ) {
-             Optional<User> byId1 = userRepository.findById(client.getUser().getId());
-             if (!byId1.isPresent()) {
-                 throw RestException.notFound("User not found",id);
-             }
-             User user1 = byId1.get();
-             userRepository.delete(user1);
-             clientRepository.delete(client);
-         }
-         else {
-             throw RestException.error("Client's balance is not 0 ");
-         }
-        ClientDto build = ClientDto.builder()
+        if(client.getBalance() == 0 ) {
+            Optional<User> byId1 = userRepository.findById(client.getUser().getId());
+            if (!byId1.isPresent()) {
+                throw RestException.notFound("User not found",id);
+            }
+            User user1 = byId1.get();
+            userRepository.delete(user1);
+            clientRepository.delete(client);
+        }
+        else {
+            throw RestException.error("Client's balance is not 0 ");
+        }
+        ClientDTO build = ClientDTO.builder()
                 .id(client.getId())
                 .role(client.getUser().getRole())
                 .balance(client.getBalance())
