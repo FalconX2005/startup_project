@@ -39,11 +39,11 @@ public class User extends AbsLongEntity {
     private RoleEnum role;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
-        return List.of();
-    }
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.name());
+//        return List.of();
+//    }
 
     private String resetCode;
 
