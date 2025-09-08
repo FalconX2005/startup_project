@@ -25,6 +25,7 @@ public class DebtsController {
     public ApiResult<DebtsDTO> getDebtById(@PathVariable Long id) {
         return debtsService.findById(id);
     }
+
     @PostMapping("/create")
     public ApiResult<DebtsDTO> createDebt(@RequestBody DebtsDto dto) {
         return debtsService.save(dto);
