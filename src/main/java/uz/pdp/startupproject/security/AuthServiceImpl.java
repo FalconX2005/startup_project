@@ -59,7 +59,7 @@ public class AuthServiceImpl implements AuthService {
 
         return jwtProvider.generateToken(
                 user.getUsername(),
-                new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000) // 1 kunlik token
+                new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)
         );
     }
 

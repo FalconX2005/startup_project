@@ -43,7 +43,5 @@ public class JwtProvider {
                 .parseClaimsJws(token);
 
         return claimsJws.getBody().getSubject();
-
     }
-
 }

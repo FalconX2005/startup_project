@@ -37,7 +37,6 @@ public class SecurityFilter  extends OncePerRequestFilter {
 
         String authorization = request.getHeader("Authorization");
 
-        // todo JWT token
         if (Objects.nonNull(authorization) && authorization.startsWith("Bearer ")) {
 
             String token = authorization.substring(7);
