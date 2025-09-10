@@ -13,6 +13,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import uz.pdp.startupproject.entity.Employee;
+import uz.pdp.startupproject.entity.User;
+import uz.pdp.startupproject.repository.EmployeeRepository;
+import uz.pdp.startupproject.repository.UserRepository;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,6 +28,8 @@ public class TelegramBotService extends TelegramLongPollingBot {
     private static final Logger log = LoggerFactory.getLogger(TelegramBotService.class);
 
     private final PasswordResetService passwordResetService;
+    private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
 
     @Value("${telegram.bot.token}")
     private String botToken;
@@ -33,7 +39,7 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     private final Map<Long, ResetSession> userState = new ConcurrentHashMap<>();
 
-    private enum State { WAITING_FOR_USERNAME, DONE }
+    private enum State {WAITING_FOR_USERNAME, WAITING_FOR_PHONE, DONE}
 
     @Override
     public void onUpdateReceived(Update update) {
@@ -80,16 +86,41 @@ public class TelegramBotService extends TelegramLongPollingBot {
             }
 
             ResetSession session = userState.get(chatId);
+
             if (session != null && session.state == State.WAITING_FOR_USERNAME) {
-                try {
-                    String code = passwordResetService.startReset(text, chatId);
-                    session.state = State.DONE;
-                    sendMessage(chatId, "Parolni tiklash kodingiz: *" + code + "*\nIltimos, uni web-saytda kiriting.");
-                } catch (UsernameNotFoundException e) {
-                    log.warn("Foydalanuvchi topilmadi: {}", text);
+                Optional<User> userOpt = userRepository.findByUsername(text);
+                if (userOpt.isEmpty()) {
                     sendMessage(chatId, "❌ Foydalanuvchi topilmadi.");
+                    return;
+                }
+
+                session.username = text;
+                session.state = State.WAITING_FOR_PHONE;
+                sendMessage(chatId, "📱 Endi ro‘yxatdan o‘tgan telefon raqamingizni kiriting (+998 formatda):");
+                return;
+            }
+
+            if (session != null && session.state == State.WAITING_FOR_PHONE) {
+                Optional<User> userOpt = userRepository.findByUsername(session.username);
+                if (userOpt.isPresent()) {
+                    User user = userOpt.get();
+                    Optional<Employee> empOpt = employeeRepository.findByUser(user);
+                    if (empOpt.isPresent()) {
+                        Employee emp = empOpt.get();
+                        if (emp.getPhoneNumber().equals(text)) {
+                            String code = passwordResetService.startReset(session.username, chatId);
+                            session.state = State.DONE;
+                            sendMessage(chatId, "✅ Parolni tiklash kodingiz: *" + code + "*\nIltimos, uni web-saytda kiriting.");
+                        } else {
+                            sendMessage(chatId, "❌ Telefon raqam mos kelmadi.");
+                        }
+                    } else {
+                        sendMessage(chatId, "❌ Ushbu foydalanuvchiga bog‘langan hodim topilmadi.");
+                    }
                 }
             }
+
+
         }
     }
 
@@ -108,14 +139,23 @@ public class TelegramBotService extends TelegramLongPollingBot {
         }
     }
 
-    @Override
-    public String getBotUsername() { return botUsername; }
 
     @Override
-    public String getBotToken() { return botToken; }
+    public String getBotUsername() {
+        return botUsername;
+    }
+
+    @Override
+    public String getBotToken() {
+        return botToken;
+    }
 
     static class ResetSession {
         State state;
-        ResetSession(State state) { this.state = state; }
+        String username;
+
+        ResetSession(State state) {
+            this.state = state;
+        }
     }
 }
