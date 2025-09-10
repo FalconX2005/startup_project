@@ -21,7 +21,6 @@ logging:
     org.apache.coyote.http11: ERROR
 
 
-
 telegram:
   bot:
     username: t.me/startup_crm_bot

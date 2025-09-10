@@ -9,9 +9,12 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -34,29 +37,62 @@ public class TelegramBotService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        if (!update.hasMessage() || !update.getMessage().hasText()) return;
+        if (update.hasCallbackQuery()) {
+            String data = update.getCallbackQuery().getData();
+            Long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        Long chatId = update.getMessage().getChatId();
-        String text = update.getMessage().getText();
-
-        if ("/start".equals(text)) {
-            sendMessage(chatId, "Parolni tiklash uchun username kiriting:");
-            userState.put(chatId, new ResetSession(State.WAITING_FOR_USERNAME));
+            if ("RESET_PASSWORD".equals(data)) {
+                sendMessage(chatId, "🔑 Parolni tiklash uchun username kiriting:");
+                userState.put(chatId, new ResetSession(State.WAITING_FOR_USERNAME));
+            }
             return;
         }
 
-        ResetSession session = userState.get(chatId);
-        if (session != null && session.state == State.WAITING_FOR_USERNAME) {
-            try {
-                String code = passwordResetService.startReset(text, chatId);
-                session.state = State.DONE;
-                sendMessage(chatId, "Parolni tiklash kodingiz: *" + code + "*\nIltimos, uni web-saytda kiriting.");
-            } catch (UsernameNotFoundException e) {
-                log.warn("Foydalanuvchi topilmadi: {}", text);
-                sendMessage(chatId, "Foydalanuvchi topilmadi.");
+        if (update.hasMessage() && update.getMessage().hasText()) {
+            Long chatId = update.getMessage().getChatId();
+            String text = update.getMessage().getText();
+
+            if ("/start".equals(text)) {
+                InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+                List<List<InlineKeyboardButton>> rows = new ArrayList<>();
+
+                InlineKeyboardButton resetBtn = new InlineKeyboardButton();
+                resetBtn.setText("🔑 Parolni tiklash");
+                resetBtn.setCallbackData("RESET_PASSWORD");
+
+                InlineKeyboardButton webBtn = new InlineKeyboardButton();
+                webBtn.setText("🌐 PayPeak WebApp");
+                webBtn.setWebApp(new WebAppInfo("https://debt-crm-kappa.vercel.app/user"));
+
+                rows.add(Collections.singletonList(resetBtn));
+                rows.add(Collections.singletonList(webBtn));
+
+                markup.setKeyboard(rows);
+
+                SendMessage msg = new SendMessage(String.valueOf(chatId), "Kerakli bo‘limni tanlang ⬇️");
+                msg.setReplyMarkup(markup);
+                try {
+                    execute(msg);
+                } catch (TelegramApiException e) {
+                    log.error("Xabar yuborishda xatolik: ", e);
+                }
+                return;
+            }
+
+            ResetSession session = userState.get(chatId);
+            if (session != null && session.state == State.WAITING_FOR_USERNAME) {
+                try {
+                    String code = passwordResetService.startReset(text, chatId);
+                    session.state = State.DONE;
+                    sendMessage(chatId, "Parolni tiklash kodingiz: *" + code + "*\nIltimos, uni web-saytda kiriting.");
+                } catch (UsernameNotFoundException e) {
+                    log.warn("Foydalanuvchi topilmadi: {}", text);
+                    sendMessage(chatId, "❌ Foydalanuvchi topilmadi.");
+                }
             }
         }
     }
+
 
     public void sendPasswordChangedMessage(Long chatId) {
         sendMessage(chatId, "✅ Parolingiz muvaffaqiyatli o‘zgartirildi.");
